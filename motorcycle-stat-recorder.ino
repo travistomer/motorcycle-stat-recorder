@@ -74,29 +74,25 @@ void loop() {
   Serial.print(" \tZ: "); Serial.print(event.acceleration.z);
   Serial.print(" m/s^2 ");
 
+  // Get roll using sensor event
+  theta = event.orientation.roll;
+  
+  // Display theta value
+  Serial.print("\tTheta: "); Serial.print(theta*10);
 
-  // Calculate lean angle (x)
-  theta = atan(event.acceleration.x / (sqrt(event.acceleration.y * event.acceleration.x + event.acceleration.z * event.acceleration.z)));
-
-  // Convert to degrees
-  theta = theta * 180/3.14159;
+  float roll = calcAngle(event.acceleration.x, event.acceleration.y, event.acceleration.z);
 
   // Display theta value
-  Serial.print("\tTheta: "); Serial.print(theta);
+  Serial.print("\tTheta (atan2): "); Serial.print(roll);
 
-
-  // Calculate angle using atan2
-  theta = atan2(event.acceleration.y, event.acceleration.z); //roll
-  // Convert to degrees
-  theta = theta * 180/3.14159;
-  
-  Serial.print("\tTheta (atan2): "); Serial.print(theta);
   
   Serial.println();
 
 }
 
 // Calculates lean angle from accelerometer readings 
-float calcAngle(){
-  
+float calcAngle(float accelX, float accelY, float accelZ){
+  // Calculate angle using atan2
+  float theta = atan2(accelX, accelZ) * 180/3.14159; //roll
+  return theta;
 }
